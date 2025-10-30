@@ -29,6 +29,8 @@ GOOGLE_API_KEYS = os.environ.get('GOOGLE_API_KEYS', '').split(',')
 GOOGLE_CX_ID = os.environ.get('GOOGLE_CX_ID', '')
 HUNTER_API_KEY = os.environ.get('HUNTER_API_KEY', '')
 
+GAIMINI_API_KEY = os.environ.get('GAIMINI_API_KEY', '')
+
 # API Key rotation index
 api_key_index = 0
 
@@ -49,7 +51,11 @@ def search_linkedin_url(domain, role):
             logger.error("No Google API key available")
             return None
         
-        query = f'site:linkedin.com/in ("{role}") "{domain}"'
+        # Build a simple boolean query to find LinkedIn profiles for the given domain and role.
+        # Using the X‑ray search operator "site:" limits results to LinkedIn profile pages and
+        # includes both the domain and the role as keywords.  Quotes are removed to allow
+        # flexible matching across the page text.
+        query = f'site:linkedin.com/in {domain} {role}'
         url = "https://www.googleapis.com/customsearch/v1"
         
         params = {
@@ -188,8 +194,9 @@ def process_domain_role(domain, role):
                 'matched_role': role
             }
         
-        # Step 2: Scrape LinkedIn profile with Playwright
-        profile_data = scrape_linkedin_profile(linkedin_url)
+        # Step 2: Scrape LinkedIn profile with Playwright.  Pass the role so
+        # that the scraper can attempt to classify the title via Gemini.
+        profile_data = scrape_linkedin_profile(linkedin_url, role)
         
         if not profile_data:
             logger.warning(f"Failed to scrape LinkedIn profile: {linkedin_url}")
@@ -200,6 +207,19 @@ def process_domain_role(domain, role):
                 'email': 'Not Found',
                 'linkedin_url': linkedin_url,
                 'matched_role': role
+            }
+
+        # If the scraper attempted a role match, skip results that do not match
+        role_match = profile_data.get('role_match')
+        if role_match is False:
+            logger.info(f"Profile at {linkedin_url} does not match role {role}; skipping.")
+            return {
+                'domain': domain,
+                'name': profile_data.get('name', 'Not Found'),
+                'title': profile_data.get('title', 'Not Found'),
+                'email': 'Not Found',
+                'linkedin_url': linkedin_url,
+                'matched_role': f'Filtered (not {role})'
             }
         
         name = profile_data.get('name', 'Not Found')
