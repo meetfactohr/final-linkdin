@@ -1,0 +1,134 @@
+/* Custom styles for Corporate Contact Finder */
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+/* Smooth animations */
+.fade-in {
+    animation: fadeIn 0.3s ease-in;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Table styling */
+#resultsTable {
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+#resultsTable thead tr {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+#resultsTable tbody tr:hover {
+    background-color: #f9fafb;
+}
+
+/* Status indicators */
+.status-success {
+    color: #10b981;
+    font-weight: 600;
+}
+
+.status-error {
+    color: #ef4444;
+    font-weight: 600;
+}
+
+.status-not-found {
+    color: #f59e0b;
+    font-weight: 600;
+}
+
+/* Log entries */
+.log-entry {
+    padding: 4px 0;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.log-entry:last-child {
+    border-bottom: none;
+}
+
+.log-success {
+    color: #10b981;
+}
+
+.log-error {
+    color: #ef4444;
+}
+
+.log-info {
+    color: #6366f1;
+}
+
+/* Loading spinner */
+.spinner {
+    border: 3px solid #f3f4f6;
+    border-top: 3px solid #6366f1;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    animation: spin 1s linear infinite;
+    display: inline-block;
+    margin-left: 8px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Scrollbar styling */
+#statusLog::-webkit-scrollbar {
+    width: 8px;
+}
+
+#statusLog::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+#statusLog::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 4px;
+}
+
+#statusLog::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+/* LinkedIn link styling */
+.linkedin-link {
+    color: #0077b5;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.linkedin-link:hover {
+    text-decoration: underline;
+}
+
+/* Responsive table */
+@media (max-width: 768px) {
+    #resultsTable {
+        font-size: 0.875rem;
+    }
+    
+    #resultsTable th,
+    #resultsTable td {
+        padding: 8px;
+    }
+}

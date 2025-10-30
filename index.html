@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Corporate Contact Finder</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen">
+    <div class="container mx-auto px-4 py-8 max-w-7xl">
+        <!-- Header -->
+        <header class="text-center mb-8">
+            <h1 class="text-4xl font-bold text-indigo-900 mb-2">Corporate Contact Finder</h1>
+            <p class="text-gray-600">Find verified contacts from LinkedIn profiles across multiple companies</p>
+        </header>
+
+        <!-- Main Card -->
+        <div class="bg-white rounded-lg shadow-xl p-6 mb-6">
+            <!-- Input Section -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                <!-- Domains Input -->
+                <div>
+                    <label for="domains" class="block text-sm font-medium text-gray-700 mb-2">
+                        Enter Domains (one per line)
+                    </label>
+                    <textarea
+                        id="domains"
+                        rows="8"
+                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent resize-none"
+                        placeholder="factohr.com&#10;darwinbox.com&#10;greythr.com&#10;keka.com"
+                    ></textarea>
+                    <p class="mt-2 text-sm text-gray-500">
+                        Enter one domain per line.
+                    </p>
+                </div>
+
+                <!-- Roles Input -->
+                <div>
+                    <label for="roles" class="block text-sm font-medium text-gray-700 mb-2">
+                        Enter Roles (one per line)
+                    </label>
+                    <textarea
+                        id="roles"
+                        rows="8"
+                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent resize-none"
+                        placeholder="CEO&#10;CTO&#10;Marketing Manager&#10;HR Head"
+                    ></textarea>
+                    <p class="mt-2 text-sm text-gray-500">
+                        Enter one role per line. System will search for each domain-role combination.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Control Buttons -->
+            <div class="flex gap-4 mb-6">
+                <button
+                    id="startBtn"
+                    class="flex-1 bg-indigo-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-indigo-700 transition duration-200 shadow-md hover:shadow-lg"
+                >
+                    Start Search
+                </button>
+                <button
+                    id="stopBtn"
+                    class="flex-1 bg-red-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-red-700 transition duration-200 shadow-md hover:shadow-lg hidden"
+                >
+                    Stop Search
+                </button>
+                <button
+                    id="downloadBtn"
+                    class="flex-1 bg-green-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-green-700 transition duration-200 shadow-md hover:shadow-lg disabled:bg-gray-400 disabled:cursor-not-allowed"
+                    disabled
+                >
+                    Download CSV
+                </button>
+            </div>
+
+            <!-- Progress Section -->
+            <div id="progressSection" class="hidden mb-6">
+                <div class="bg-gray-100 rounded-lg p-4">
+                    <div class="flex justify-between mb-2">
+                        <span class="text-sm font-medium text-gray-700" id="progressText">Processing...</span>
+                        <span class="text-sm font-medium text-gray-700" id="progressCount">0 / 0</span>
+                    </div>
+                    <div class="w-full bg-gray-300 rounded-full h-3">
+                        <div
+                            id="progressBar"
+                            class="bg-indigo-600 h-3 rounded-full transition-all duration-300"
+                            style="width: 0%"
+                        ></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Status Log -->
+            <div id="statusLog" class="bg-gray-50 rounded-lg p-4 mb-6 hidden max-h-48 overflow-y-auto">
+                <h3 class="text-sm font-semibold text-gray-700 mb-2">Search Log</h3>
+                <div id="logContent" class="text-xs text-gray-600 font-mono space-y-1"></div>
+            </div>
+        </div>
+
+        <!-- Results Section -->
+        <div id="resultsSection" class="bg-white rounded-lg shadow-xl p-6 hidden">
+            <h2 class="text-2xl font-bold text-gray-800 mb-4">Search Results</h2>
+            <div class="overflow-x-auto">
+                <table class="w-full" id="resultsTable">
+                    <thead>
+                        <tr class="bg-indigo-100">
+                            <th class="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Domain</th>
+                            <th class="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Name</th>
+                            <th class="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Title</th>
+                            <th class="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Email</th>
+                            <th class="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">LinkedIn</th>
+                            <th class="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Role Match</th>
+                        </tr>
+                    </thead>
+                    <tbody id="resultsBody" class="bg-white divide-y divide-gray-200">
+                    </tbody>
+                </table>
+            </div>
+            <div class="mt-4 text-sm text-gray-600">
+                <p><strong>Total Results:</strong> <span id="totalResults">0</span></p>
+                <p><strong>Successful Matches:</strong> <span id="successCount">0</span></p>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
